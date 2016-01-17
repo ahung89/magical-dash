@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     public float AddedLongJumpForce = 0.5f;
     public float MaxLongJumpForce = 3f;
 
+    public float ConstantForwardVelocity = 5f;
+
     private bool _isGrounded = false;
     private bool _isJumping = false;
 
@@ -19,11 +21,12 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         Rigidbody2D rigidBody = GetComponent<Rigidbody2D>();
+        rigidBody.velocity = new Vector2(ConstantForwardVelocity, rigidBody.velocity.y);
 
         _isGrounded = Physics2D.OverlapCircle(PlatformDetector.position, PlatformDetectionRadius, PlatformMask);
 
         // Basic jump
-        if(_isGrounded)
+        if (_isGrounded)
         {
             _isJumping = false;
             _remainingLongJumpForce = 0f;
@@ -37,9 +40,9 @@ public class PlayerController : MonoBehaviour
         }
 
         // Long jump (if user is holding down "jump" during the ascent of a jump)
-        if(_isJumping && rigidBody.velocity.y > 0 && _remainingLongJumpForce > 0)
+        if (_isJumping && rigidBody.velocity.y > 0 && _remainingLongJumpForce > 0)
         {
-            if(Input.GetButton("Jump"))
+            if (Input.GetButton("Jump"))
             {
                 rigidBody.AddForce(new Vector2(0, AddedLongJumpForce), ForceMode2D.Impulse);
                 _remainingLongJumpForce -= AddedLongJumpForce;
