@@ -42,7 +42,7 @@ public class TerrainRenderer : MonoBehaviour {
 
     void SampleGenerate(int xSize, int ySize)
     {
-        testTileOffset = new Vector2(2, 11);
+        testTileOffset = new Vector2(1, 4);
 
         for (int x = 0; x < xSize; x++)
         {

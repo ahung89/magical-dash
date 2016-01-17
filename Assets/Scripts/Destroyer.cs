@@ -15,7 +15,7 @@ public class Destroyer : MonoBehaviour {
         for(int x = 0; x < pools.Count; x++)
         {
             StackPool pool = pools[x];
-            poolDictionary.Add(pool.pooledObject.tag, pool);
+            poolDictionary.Add(pool.PooledObject.tag, pool);
         }
     }
 

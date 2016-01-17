@@ -6,9 +6,12 @@ using System.Collections.Generic;
 // or if a player acquires a new weapon.
 public class StackPool : MonoBehaviour {
 
-    public GameObject pooledObject;
-    public int preloadAmount = 20;
-    public bool allowGrowth = true;
+    public GameObject PooledObject;
+
+    [SerializeField]
+    private int preloadAmount = 20;
+    [SerializeField]
+    private bool allowGrowth = true;
 
     private Stack<GameObject> pooledObjects;
 
@@ -16,7 +19,7 @@ public class StackPool : MonoBehaviour {
         pooledObjects = new Stack<GameObject>();
         for (int i = 0; i < preloadAmount; i++)
         {
-            GameObject obj = Instantiate(pooledObject) as GameObject;
+            GameObject obj = Instantiate(PooledObject) as GameObject;
             obj.transform.SetParent(transform);
             obj.SetActive(false);
             pooledObjects.Push(obj);
@@ -38,7 +41,7 @@ public class StackPool : MonoBehaviour {
 
         if (allowGrowth)
         {
-            GameObject obj = Instantiate(pooledObject) as GameObject;
+            GameObject obj = Instantiate(PooledObject) as GameObject;
             obj.transform.SetParent(transform);
             return obj;
         }
