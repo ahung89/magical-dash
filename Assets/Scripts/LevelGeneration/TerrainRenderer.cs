@@ -33,6 +33,7 @@ public class TerrainRenderer : MonoBehaviour {
 
     public void Generate(int xSize, int ySize)
     {
+        ClearMesh();
         // "SampleGenerate" is just throwaway code just to make sure that this script works. Later it will be replaced with
         // actual logic on how to render the terrain block.
         SampleGenerate(xSize, ySize);        
@@ -51,6 +52,14 @@ public class TerrainRenderer : MonoBehaviour {
                 GenerateSquare(x, y, xSize, testTileOffset);
             }
         }
+    }
+
+    void ClearMesh()
+    {
+        mesh.Clear();
+        vertices.Clear();
+        uv.Clear();
+        triangles.Clear();
     }
 
     void GenerateSquare(int x, int y, int xSize, Vector2 tileOffset)
