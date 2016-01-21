@@ -11,7 +11,7 @@ public class PlayerController : MonoBehaviour
     public float AddedLongJumpForce = 0.5f;
     public float MaxLongJumpForce = 3f;
 
-    public float ConstantForwardVelocity = 5f;
+    public float ConstantForwardVelocity = 10f;
 
     private bool _isGrounded = false;
     private bool _isJumping = false;
@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         Rigidbody2D rigidBody = GetComponent<Rigidbody2D>();
-        rigidBody.velocity = new Vector2(ConstantForwardVelocity, rigidBody.velocity.y);
+        rigidBody.AddForce(new Vector2(ConstantForwardVelocity - rigidBody.velocity.x, 0));
 
         _isGrounded = Physics2D.OverlapCircle(PlatformDetector.position, PlatformDetectionRadius, PlatformMask);
 
