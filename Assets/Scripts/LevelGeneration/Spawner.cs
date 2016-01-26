@@ -46,6 +46,7 @@ public class Spawner : MonoBehaviour {
     void SpawnNext()
     {
         int rand = Random.Range(0, 2);
+        //int rand = 0;
         if (rand == 0)
         {
             SpawnPlatform();

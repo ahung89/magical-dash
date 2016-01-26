@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using SerializableObjects;
 using System.Collections.Generic;
 
 public class Destroyer : MonoBehaviour {
@@ -26,6 +27,20 @@ public class Destroyer : MonoBehaviour {
             StackPool pool = poolDictionary[other.gameObject.tag];
             other.gameObject.SetActive(false);
             pool.Push(other.gameObject);
+            SendObjectOverNetwork(other.gameObject);
+        }
+    }
+
+    void SendObjectOverNetwork(GameObject obj)
+    {
+        if (obj.tag == "Platform")
+        {
+            PhotonNetwork.RaiseEvent(0, (Vector2)obj.transform.position, true, null);
+        } else if (obj.tag == "Terrain")
+        {
+            TerrainRenderer renderer = obj.GetComponent<TerrainRenderer>();
+            TerrainBlock block = new TerrainBlock(obj.transform.position, renderer.WidthInTiles, renderer.HeightInTiles);
+            PhotonNetwork.RaiseEvent(1, block, true, null);
         }
     }
 }

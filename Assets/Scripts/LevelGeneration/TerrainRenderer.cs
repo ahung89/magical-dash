@@ -11,6 +11,9 @@ public class TerrainRenderer : MonoBehaviour {
     [SerializeField]
     private float numRowsInTilesheet;
 
+    public int WidthInTiles { get; set; }
+    public int HeightInTiles { get; set; }
+
     private List<Vector3> vertices = new List<Vector3>();
     private List<Vector2> uv = new List<Vector2>();
     private List<int> triangles = new List<int>();
@@ -33,6 +36,9 @@ public class TerrainRenderer : MonoBehaviour {
 
     public void Generate(int xSize, int ySize)
     {
+        WidthInTiles = xSize;
+        HeightInTiles = ySize;
+
         ClearMesh();
         // "SampleGenerate" is just throwaway code just to make sure that this script works. Later it will be replaced with
         // actual logic on how to render the terrain block.
@@ -78,10 +84,10 @@ public class TerrainRenderer : MonoBehaviour {
         triangles.Add((squareIndex * 4) + 2);
         triangles.Add((squareIndex * 4) + 3);
 
-        uv.Add(new Vector2(tUnitX * tileOffset.x, tUnitY * tileOffset.y + tUnitY));
-        uv.Add(new Vector2(tUnitX * tileOffset.x + tUnitX, tUnitY * tileOffset.y + tUnitY));
-        uv.Add(new Vector2(tUnitX * tileOffset.x + tUnitX, tUnitY * tileOffset.y));
         uv.Add(new Vector2(tUnitX * tileOffset.x, tUnitY * tileOffset.y));
+        uv.Add(new Vector2(tUnitX * tileOffset.x + tUnitX, tUnitY * tileOffset.y));
+        uv.Add(new Vector2(tUnitX * tileOffset.x + tUnitX, tUnitY * tileOffset.y + tUnitY));
+        uv.Add(new Vector2(tUnitX * tileOffset.x, tUnitY * tileOffset.y + tUnitY));
     }
 
     void DrawMesh()
