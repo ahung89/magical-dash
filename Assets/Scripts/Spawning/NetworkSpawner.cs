@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using SerializableObjects;
 
-public class NetworkSpawner : MonoBehaviour {
+public class NetworkSpawner : SpawnerBase
+{
     [SerializeField]
     private StackPool platformPool;
-    [SerializeField]
-    private StackPool terrainPool;
     [SerializeField]
     private float distanceOffset;
 
@@ -27,16 +26,11 @@ public class NetworkSpawner : MonoBehaviour {
 
     void SpawnPlatform(Vector2 pos)
     {
-        GameObject platform = platformPool.Pop();
-        platform.transform.position = new Vector2(pos.x + distanceOffset, pos.y);
-        platform.SetActive(true);
+        base.SpawnPlatform(pos.x + distanceOffset, pos.y);
     }
 
     void SpawnTerrain(Vector2 pos, int width, int height)
     {
-        TerrainRenderer terrainRenderer = terrainPool.Pop().GetComponent<TerrainRenderer>();
-        terrainRenderer.transform.position = new Vector2(pos.x + distanceOffset, pos.y);
-        terrainRenderer.gameObject.SetActive(true);
-        terrainRenderer.Generate(width, height);
+        base.SpawnTerrain(pos.x + distanceOffset, pos.y, width, height);
     }
 }
