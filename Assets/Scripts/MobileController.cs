@@ -6,7 +6,9 @@ using UnityEngine.UI;
 public class MobileController : MonoBehaviour {
 
     public Text DetectionDisplay;
-	
+
+    public bool _isSwiping = false;
+
 	void Update()
     {
         if(Input.touchCount > 0)
@@ -16,7 +18,21 @@ public class MobileController : MonoBehaviour {
             // Detect: Tap
             if(touchInput.phase == TouchPhase.Ended)
             {
-                DetectionDisplay.text = String.Format("Tapped at {0}, {1}", touchInput.position.x, touchInput.position.y);
+                if(_isSwiping)
+                {
+                    _isSwiping = false;
+                    return;
+                }
+
+                DetectionDisplay.text = String.Format("Detected tap at {0}, {1}", touchInput.position.x, touchInput.position.y);
+                return;
+            }
+
+            // Detect: Swipe
+            if (touchInput.phase == TouchPhase.Moved)
+            {
+                _isSwiping = true;
+                DetectionDisplay.text = "Detected swipe";
                 return;
             }
         }
