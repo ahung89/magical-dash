@@ -5,6 +5,7 @@ public class PlayerController : MonoBehaviour
     public Transform PlatformDetector;
     public float PlatformDetectionRadius = 0.2f;
     public LayerMask PlatformMask;
+    public Camera Camera;
 
     public float BaseJumpForce = 5f;
 
@@ -48,5 +49,18 @@ public class PlayerController : MonoBehaviour
                 _remainingLongJumpForce -= AddedLongJumpForce;
             }
         }
+    }
+
+    void OnBecameInvisible()
+    {
+        Rigidbody2D rigidBody = GetComponent<Rigidbody2D>();
+
+        // Reset the player's velocity
+        rigidBody.velocity = new Vector2(0, 0);
+
+        // Move character to the center of the screen
+        Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, Camera.main.nearClipPlane);
+        Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
+        rigidBody.position = worldCenter;
     }
 }
