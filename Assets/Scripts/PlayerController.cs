@@ -59,6 +59,19 @@ public class PlayerController : MonoBehaviour
 
     void OnBecameInvisible()
     {
+        ResetPlayer();
+    }
+
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if(col.collider.gameObject.tag == "Obstacle")
+        {
+            ResetPlayer();
+        }
+    }
+
+    void ResetPlayer()
+    {
         Rigidbody2D rigidBody = GetComponent<Rigidbody2D>();
 
         // Reset the player's velocity
