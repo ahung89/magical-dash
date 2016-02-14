@@ -36,6 +36,9 @@ public class TerrainRenderer : MonoBehaviour {
 
     public void Generate(int xSize, int ySize)
     {
+        // For detection by destroyer.
+        boxCollider2D.size = new Vector2(.1f, .1f);
+
         WidthInTiles = xSize;
         HeightInTiles = ySize;
 
@@ -44,7 +47,6 @@ public class TerrainRenderer : MonoBehaviour {
         // actual logic on how to render the terrain block.
         SampleGenerate(xSize, ySize);        
         DrawMesh();
-        ConfigureCollider(xSize, ySize);
     }
 
     void SampleGenerate(int xSize, int ySize)
@@ -97,7 +99,7 @@ public class TerrainRenderer : MonoBehaviour {
         mesh.uv = uv.ToArray();
     }
 
-    void ConfigureCollider(int xSize, int ySize)
+    public void ConfigureCollider(int xSize, int ySize)
     {
         boxCollider2D.offset = new Vector2((float)xSize / 2f, (float)ySize / 2f);
         boxCollider2D.size = new Vector2(xSize, ySize);

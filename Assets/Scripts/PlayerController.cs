@@ -6,13 +6,12 @@ public class PlayerController : MonoBehaviour
     public float PlatformDetectionRadius = 0.2f;
     public LayerMask PlatformMask;
 
-    public float ConstantForwardVelocity = 10f;
-
     private bool _isGrounded = false;
     private bool _isJumping = false;
     private bool _isHoldingJumpButton = false;
 
     private float _jumpStartTime = 0f;
+    private float _constantForwardVelocity;
 
     public float MaxHoldTime;
     public float JumpVelocity ;
@@ -28,6 +27,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        _constantForwardVelocity = GameSettings.Instance.GameSpeed;
+
         _isGrounded = Physics2D.OverlapCircle(PlatformDetector.position, PlatformDetectionRadius, PlatformMask);
 
         _isHoldingJumpButton = Input.GetButton("Jump");
@@ -49,10 +50,7 @@ public class PlayerController : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_isGrounded)
-        {
-            rb2d.velocity = new Vector2(ConstantForwardVelocity, rb2d.velocity.y);
-        }
+        rb2d.velocity = new Vector2(_constantForwardVelocity, rb2d.velocity.y);
 
         float jumpTime = Time.realtimeSinceStartup - _jumpStartTime;
 
@@ -60,7 +58,7 @@ public class PlayerController : MonoBehaviour
         {
 
             float newVelocityY = rb2d.velocity.y - Deceleration;
-            rb2d.velocity = new Vector2(ConstantForwardVelocity, newVelocityY);
+            rb2d.velocity = new Vector2(_constantForwardVelocity, newVelocityY);
         }
     }
 
@@ -86,7 +84,7 @@ public class PlayerController : MonoBehaviour
     void ResetPlayer()
     {
         // Reset the player's velocity
-        rb2d.velocity = new Vector2(ConstantForwardVelocity, 0);
+        rb2d.velocity = new Vector2(_constantForwardVelocity, 0);
 
         // Move character to the center of the screen
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2 + 100, Camera.main.nearClipPlane);

@@ -18,12 +18,13 @@ public class SpawnerBase : MonoBehaviour {
         platform.SetActive(true);
     }
 
-    public virtual void SpawnTerrain (float posX, float posY, int width, int height)
+    public virtual TerrainRenderer SpawnTerrain (float posX, float posY, int width, int height)
     {
         TerrainRenderer terrainRenderer = terrainPool.Pop().GetComponent<TerrainRenderer>();
         terrainRenderer.transform.position = new Vector2(posX, posY);
         terrainRenderer.gameObject.SetActive(true);
         terrainRenderer.Generate(width, height);
+        return terrainRenderer;
     }
 
     public virtual void SpawnObstacle(float posX, float posY)

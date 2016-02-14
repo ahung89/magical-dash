@@ -83,7 +83,7 @@ public class Spawner : SpawnerBase
         }
 
         // Schedule next spawn
-        Invoke("SpawnNext", GameSettings.SmallPlatformWidth / GameSettings.GameSpeed + Random.Range(minSpawnWaitTime, maxSpawnWaitTime));
+        Invoke("SpawnNext", GameSettings.SmallPlatformWidth / GameSettings.Instance.GameSpeed + Random.Range(minSpawnWaitTime, maxSpawnWaitTime));
     }
 
     void SpawnTerrain()
@@ -91,6 +91,10 @@ public class Spawner : SpawnerBase
         // Spawn terrain
         int numSegments = Random.Range(minContiguousTerrainSegments, maxContiguousTerrainSegments);
         int totalWidth = 0; // measured in # tiles
+
+        int currentSequenceWidth = 0;
+        int heightOfCurrentSequence = 0;
+        TerrainRenderer firstSegment = null;
 
         for (int x = 0; x < numSegments; x++)
         {
@@ -100,7 +104,32 @@ public class Spawner : SpawnerBase
             float terrainSegmentX = transform.position.x + totalWidth;
             float terrainSegmentY = cameraLowerEdge;
 
-            base.SpawnTerrain(terrainSegmentX, terrainSegmentY, segmentWidth, segmentHeight);
+            TerrainRenderer currentSegment = base.SpawnTerrain(terrainSegmentX, terrainSegmentY, segmentWidth, segmentHeight);
+
+            if (x == 0)
+            {
+                firstSegment = currentSegment;
+            }
+            else if (segmentHeight != heightOfCurrentSequence)
+            {
+                firstSegment.ConfigureCollider(currentSequenceWidth, heightOfCurrentSequence);
+                firstSegment = currentSegment;
+                currentSequenceWidth = 0;
+            }
+
+            if (x == numSegments - 1)
+            {
+                if (segmentHeight == heightOfCurrentSequence)
+                {
+                    firstSegment.ConfigureCollider(currentSequenceWidth + segmentWidth, heightOfCurrentSequence);
+                } else
+                {
+                    currentSegment.ConfigureCollider(segmentWidth, segmentHeight);
+                }
+            }
+
+            currentSequenceWidth += segmentWidth;
+            heightOfCurrentSequence = segmentHeight;
 
             // Spawn obstacle in random location on top of terrain segment
             if (Random.Range(0, 2) == 0)
@@ -115,7 +144,7 @@ public class Spawner : SpawnerBase
         }
 
         // Schedule next spawn
-        Invoke("SpawnNext", (totalWidth * TerrainRenderer.TerrainTileUnit) / GameSettings.GameSpeed
+        Invoke("SpawnNext", (totalWidth * TerrainRenderer.TerrainTileUnit) / GameSettings.Instance.GameSpeed
             + Random.Range(minSpawnWaitTime, maxSpawnWaitTime));
     }
 

@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
 
 public class CameraMovement : MonoBehaviour {
-    [SerializeField]
-    private float velocity;
 
-	void Update () {
-        transform.Translate(velocity * Time.deltaTime, 0, 0);
+    void Update () {
+        transform.Translate(GameSettings.Instance.GameSpeed * Time.deltaTime, 0, 0);
 	}
 }
