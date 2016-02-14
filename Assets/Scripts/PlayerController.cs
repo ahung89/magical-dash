@@ -6,40 +6,48 @@ public class PlayerController : MonoBehaviour
     public float PlatformDetectionRadius = 0.2f;
     public LayerMask PlatformMask;
 
-    private bool _isGrounded = false;
-    private bool _isJumping = false;
-    private bool _isHoldingJumpButton = false;
+    public bool _isGrounded = false;
+    public bool _isJumping = false;
+    public bool _isHoldingJumpButton = false;
 
     private float _jumpStartTime = 0f;
     private float _constantForwardVelocity;
 
+    private float _halfColliderWidth;
+    private float _halfColliderHeight;
+
     public float MaxHoldTime;
-    public float JumpVelocity ;
+    public float JumpVelocity;
     public float Deceleration;
 
     private Rigidbody2D rb2d;
+    private BoxCollider2D bc;
 
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
         ResetPlayer();
+
+        bc = GetComponent<BoxCollider2D>();
+        _halfColliderWidth = bc.size.x / 2;
+        _halfColliderHeight = bc.size.y / 2;
     }
 
     void Update()
     {
         _constantForwardVelocity = GameSettings.Instance.GameSpeed;
 
-        _isGrounded = Physics2D.OverlapCircle(PlatformDetector.position, PlatformDetectionRadius, PlatformMask);
+        _isGrounded = IsGrounded();
 
         _isHoldingJumpButton = Input.GetButton("Jump");
         bool pressedJumpThisFrame = Input.GetButtonDown("Jump");
 
+        _isJumping = rb2d.velocity.y > 0;
+
         // Basic jump
         if (_isGrounded)
         {
-            _isJumping = false;
-
-            if (pressedJumpThisFrame)
+            if (pressedJumpThisFrame && !_isJumping)
             {
                 _isJumping = true;
                 _jumpStartTime = Time.realtimeSinceStartup;
@@ -54,9 +62,8 @@ public class PlayerController : MonoBehaviour
 
         float jumpTime = Time.realtimeSinceStartup - _jumpStartTime;
 
-        if ((!_isGrounded && !_isJumping) || !_isHoldingJumpButton || (_isJumping && jumpTime > MaxHoldTime))
+        if ((!_isGrounded && (!_isJumping || !_isHoldingJumpButton)) || (_isJumping && jumpTime > MaxHoldTime))
         {
-
             float newVelocityY = rb2d.velocity.y - Deceleration;
             rb2d.velocity = new Vector2(_constantForwardVelocity, newVelocityY);
         }
@@ -90,5 +97,16 @@ public class PlayerController : MonoBehaviour
         Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2 + 100, Camera.main.nearClipPlane);
         Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
         rb2d.position = worldCenter;
+    }
+
+    bool IsGrounded()
+    {
+        Vector2 center = transform.TransformPoint(bc.offset);
+
+        Vector2 lowerLeftCorner = new Vector2(center.x - _halfColliderWidth, center.y - _halfColliderHeight);
+        Vector2 lowerRightCorner = new Vector2(center.x + _halfColliderWidth, center.x + _halfColliderHeight);
+
+        return Physics2D.Raycast(lowerLeftCorner, Vector2.down, PlatformDetectionRadius, PlatformMask).transform != null
+            || Physics2D.Raycast(lowerRightCorner, Vector2.down, PlatformDetectionRadius, PlatformMask).transform != null;
     }
 }
