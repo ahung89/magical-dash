@@ -4,8 +4,12 @@ public class SpawnerBase : MonoBehaviour {
 
     [SerializeField]
     private StackPool platformPool;
+
     [SerializeField]
     private StackPool terrainPool;
+
+    [SerializeField]
+    private StackPool obstaclePool;
 
     public virtual void SpawnPlatform (float posX, float posY)
     {
@@ -20,5 +24,12 @@ public class SpawnerBase : MonoBehaviour {
         terrainRenderer.transform.position = new Vector2(posX, posY);
         terrainRenderer.gameObject.SetActive(true);
         terrainRenderer.Generate(width, height);
+    }
+
+    public virtual void SpawnObstacle(float posX, float posY)
+    {
+        GameObject obstacle = obstaclePool.Pop();
+        obstacle.transform.position = new Vector2(posX, posY);
+        obstacle.SetActive(true);
     }
 }
