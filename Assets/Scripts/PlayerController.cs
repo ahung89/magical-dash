@@ -5,49 +5,55 @@ public class PlayerController : MonoBehaviour
     public Transform PlatformDetector;
     public float PlatformDetectionRadius = 0.2f;
     public LayerMask PlatformMask;
-    public Camera Camera;
-
-    public float BaseJumpForce = 5f;
-
-    public float AddedLongJumpForce = 0.5f;
-    public float MaxLongJumpForce = 3f;
 
     public float ConstantForwardVelocity = 10f;
 
     private bool _isGrounded = false;
     private bool _isJumping = false;
+    private bool _isHoldingJumpButton = false;
 
-    private float _remainingLongJumpForce = 0f;
+    private float _jumpStartTime = 0f;
 
-    void FixedUpdate()
+    public float MaxHoldTime;
+    public float JumpVelocity ;
+    public float Deceleration;
+
+    private Rigidbody2D rigidBody;
+
+    void Start()
     {
-        Rigidbody2D rigidBody = GetComponent<Rigidbody2D>();
-        rigidBody.AddForce(new Vector2(ConstantForwardVelocity - rigidBody.velocity.x, 0));
+        rigidBody = GetComponent<Rigidbody2D>();
+    }
 
-        _isGrounded = Physics2D.OverlapCircle(PlatformDetector.position, PlatformDetectionRadius, PlatformMask);
+    void Update()
+    {
+        rigidBody.velocity = new Vector2(ConstantForwardVelocity, rigidBody.velocity.y);
+        _isHoldingJumpButton = Input.GetButton("Jump");
 
         // Basic jump
         if (_isGrounded)
         {
             _isJumping = false;
-            _remainingLongJumpForce = 0f;
 
-            if (Input.GetButton("Jump"))
+            if (_isHoldingJumpButton)
             {
-                rigidBody.AddForce(new Vector2(0, BaseJumpForce), ForceMode2D.Impulse);
                 _isJumping = true;
-                _remainingLongJumpForce = MaxLongJumpForce;
+                _jumpStartTime = Time.realtimeSinceStartup;
+                rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpVelocity);
             }
         }
+    }
 
-        // Long jump (if user is holding down "jump" during the ascent of a jump)
-        if (_isJumping && rigidBody.velocity.y > 0 && _remainingLongJumpForce > 0)
+    void FixedUpdate()
+    {
+        _isGrounded = Physics2D.OverlapCircle(PlatformDetector.position, PlatformDetectionRadius, PlatformMask);
+        float jumpTime = Time.realtimeSinceStartup - _jumpStartTime;
+
+        if ((!_isGrounded && !_isJumping) || !_isHoldingJumpButton || (_isJumping && jumpTime > MaxHoldTime))
         {
-            if (Input.GetButton("Jump"))
-            {
-                rigidBody.AddForce(new Vector2(0, AddedLongJumpForce), ForceMode2D.Impulse);
-                _remainingLongJumpForce -= AddedLongJumpForce;
-            }
+
+            float newVelocityY = rigidBody.velocity.y - Deceleration;
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, newVelocityY);
         }
     }
 
@@ -59,7 +65,7 @@ public class PlayerController : MonoBehaviour
         rigidBody.velocity = new Vector2(0, 0);
 
         // Move character to the center of the screen
-        Vector3 screenCenter = new Vector3(Screen.width / 2, Screen.height / 2, Camera.main.nearClipPlane);
+        Vector3 screenCenter = new Vector3(Screen.width / 2 + 20, Screen.height / 2, Camera.main.nearClipPlane);
         Vector3 worldCenter = Camera.main.ScreenToWorldPoint(screenCenter);
         rigidBody.position = worldCenter;
     }

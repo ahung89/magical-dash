@@ -4,8 +4,6 @@ using SerializableObjects;
 public class NetworkSpawner : SpawnerBase
 {
     [SerializeField]
-    private StackPool platformPool;
-    [SerializeField]
     private float distanceOffset;
 
     void Awake () {
