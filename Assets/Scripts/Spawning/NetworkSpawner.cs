@@ -12,13 +12,18 @@ public class NetworkSpawner : SpawnerBase
 	
 	void OnEvent(byte eventCode, object content, int senderId)
     {
-        if(eventCode == 0)
+        if(eventCode == (int) NetworkEventCode.SpawnPlatform)
         {
             SpawnPlatform((Vector2)content);
-        } else if (eventCode == 1)
+        }
+        else if (eventCode == (int) NetworkEventCode.SpawnTerrain)
         {
             TerrainBlock block = (TerrainBlock)content;
             SpawnTerrain(block.Position, block.Width, block.Height);
+        }
+        else if (eventCode == (int) NetworkEventCode.SpawnObstacle)
+        {
+            SpawnObstacle((Vector2)content);
         }
     }
 
@@ -30,5 +35,10 @@ public class NetworkSpawner : SpawnerBase
     void SpawnTerrain(Vector2 pos, int width, int height)
     {
         base.SpawnTerrain(pos.x + distanceOffset, pos.y, width, height);
+    }
+
+    void SpawnObstacle(Vector2 pos)
+    {
+        base.SpawnObstacle(pos.x + distanceOffset, pos.y);
     }
 }

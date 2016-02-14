@@ -35,12 +35,17 @@ public class Destroyer : MonoBehaviour {
     {
         if (obj.tag == "Platform")
         {
-            PhotonNetwork.RaiseEvent(0, (Vector2)obj.transform.position, true, null);
-        } else if (obj.tag == "Terrain")
+            PhotonNetwork.RaiseEvent((int) NetworkEventCode.SpawnPlatform, (Vector2) obj.transform.position, true, null);
+        }
+        else if (obj.tag == "Terrain")
         {
             TerrainRenderer renderer = obj.GetComponent<TerrainRenderer>();
             TerrainBlock block = new TerrainBlock(obj.transform.position, renderer.WidthInTiles, renderer.HeightInTiles);
-            PhotonNetwork.RaiseEvent(1, block, true, null);
+            PhotonNetwork.RaiseEvent((int) NetworkEventCode.SpawnTerrain, block, true, null);
+        }
+        else if (obj.tag == "Obstacle")
+        {
+            PhotonNetwork.RaiseEvent((int) NetworkEventCode.SpawnObstacle, (Vector2)obj.transform.position, true, null);
         }
     }
 }
