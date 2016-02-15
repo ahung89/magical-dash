@@ -39,8 +39,8 @@ public class PlayerController : MonoBehaviour
 
         _isGrounded = IsGrounded();
 
-        _isHoldingJumpButton = Input.GetButton("Jump");
-        bool pressedJumpThisFrame = Input.GetButtonDown("Jump");
+        _isHoldingJumpButton = IsHoldingJumpTrigger();
+        bool pressedJumpThisFrame = IsHoldingJumpTriggerThisFrame();
 
         _isJumping = rb2d.velocity.y > 0;
 
@@ -108,5 +108,49 @@ public class PlayerController : MonoBehaviour
 
         return Physics2D.Raycast(lowerLeftCorner, Vector2.down, PlatformDetectionRadius, PlatformMask).transform != null
             || Physics2D.Raycast(lowerRightCorner, Vector2.down, PlatformDetectionRadius, PlatformMask).transform != null;
+    }
+
+    bool IsHoldingJumpTrigger()
+    {
+        bool isHoldingKeyboardTrigger = false;
+        bool isHoldingTouchTrigger = false;
+
+        // Detect: Keyboard
+        isHoldingKeyboardTrigger = Input.GetButton("Jump");
+
+        // Detect: Touch
+        if (Input.touchCount > 0)
+        {
+            Touch touchInput = Input.GetTouch(0);
+
+            if(touchInput.phase == TouchPhase.Stationary)
+            {
+                isHoldingTouchTrigger = true;
+            }
+        }
+
+        return isHoldingKeyboardTrigger || isHoldingTouchTrigger;
+    }
+
+    bool IsHoldingJumpTriggerThisFrame()
+    {
+        bool isHoldingKeyboardTrigger = false;
+        bool isHoldingTouchTrigger = false;
+
+        // Detect: Keyboard
+        isHoldingKeyboardTrigger = Input.GetButtonDown("Jump");
+
+        // Detect: Touch
+        if (Input.touchCount > 0)
+        {
+            Touch touchInput = Input.GetTouch(0);
+
+            if (touchInput.phase == TouchPhase.Began)
+            {
+                isHoldingTouchTrigger = true;
+            }
+        }
+
+        return isHoldingKeyboardTrigger || isHoldingTouchTrigger;
     }
 }
