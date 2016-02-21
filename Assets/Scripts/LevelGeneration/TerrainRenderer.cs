@@ -13,6 +13,7 @@ public class TerrainRenderer : MonoBehaviour {
 
     public int WidthInTiles { get; set; }
     public int HeightInTiles { get; set; }
+    public bool ColliderConfigured { get; set; }
 
     private List<Vector3> vertices = new List<Vector3>();
     private List<Vector2> uv = new List<Vector2>();
@@ -38,6 +39,7 @@ public class TerrainRenderer : MonoBehaviour {
     {
         // For detection by destroyer.
         boxCollider2D.size = new Vector2(.1f, .1f);
+        ColliderConfigured = false;
 
         WidthInTiles = xSize;
         HeightInTiles = ySize;
@@ -103,5 +105,6 @@ public class TerrainRenderer : MonoBehaviour {
     {
         boxCollider2D.offset = new Vector2((float)xSize / 2f, (float)ySize / 2f);
         boxCollider2D.size = new Vector2(xSize, ySize);
+        ColliderConfigured = true;
     }
 }

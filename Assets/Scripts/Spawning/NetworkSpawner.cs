@@ -34,7 +34,8 @@ public class NetworkSpawner : SpawnerBase
 
     void SpawnTerrain(Vector2 pos, int width, int height)
     {
-        base.SpawnTerrain(pos.x + distanceOffset, pos.y, width, height);
+        TerrainRenderer terrain = base.SpawnTerrain(pos.x + distanceOffset, pos.y, width, height);
+        terrain.ConfigureCollider(width, height);
     }
 
     void SpawnObstacle(Vector2 pos)

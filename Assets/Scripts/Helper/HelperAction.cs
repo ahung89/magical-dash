@@ -32,14 +32,14 @@ public class HelperAction : MonoBehaviour {
     {
         Vector2 lowerLeft = new Vector2(point.x - smallPlatformWidth / 2f, point.y - smallPlatformHeight / 2f);
         Vector2 upperRight = new Vector2(point.x + smallPlatformWidth / 2f, point.y + smallPlatformHeight / 2f);
-        return Physics2D.OverlapArea(lowerLeft, upperRight, 1 << LayerMask.NameToLayer("Platform")) == null;
+        return Physics2D.OverlapArea(lowerLeft, upperRight, 1 << LayerMask.NameToLayer("Environment")) == null;
     }
 
     void PlacePlatform(Vector2 point)
     {
         Vector2 lowerLeft = new Vector2(point.x - smallPlatformWidth / 2f, point.y - smallPlatformHeight / 2f);
         Vector2 upperRight = new Vector2(point.x + smallPlatformWidth / 2f, point.y + smallPlatformHeight / 2f);
-        Collider2D[] colliders = Physics2D.OverlapAreaAll(lowerLeft, upperRight, 1 << LayerMask.NameToLayer("Platform"));
+        Collider2D[] colliders = Physics2D.OverlapAreaAll(lowerLeft, upperRight, 1 << LayerMask.NameToLayer("Environment"));
 
         float leftOverlap = -1, rightOverlap = -1, topOverlap = -1, bottomOverlap = -1;
         float leftEdge = point.x - smallPlatformWidth / 2, rightEdge = point.x + smallPlatformWidth / 2, topEdge = point.y + smallPlatformHeight / 2, bottomEdge = point.y - smallPlatformHeight / 2;
