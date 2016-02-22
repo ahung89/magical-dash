@@ -48,10 +48,13 @@ public class Spawner : SpawnerBase
 
 	// Use this for initialization
 	void Start () {
-        SpawnNext();
+        if (GameSettings.Instance.GameStarted)
+        {
+            SpawnNext();
+        }
     }
 
-    void SpawnNext()
+    public void SpawnNext()
     {
         int rand = Random.Range(0, 2);
 
