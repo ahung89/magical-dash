@@ -8,7 +8,7 @@ public class GameSettings : MonoBehaviour
     private Spawner spawner;
 
     public float GameSpeed = 8;
-    public bool GameStarted = false;
+    public bool MultiplayerMode;
 
     // These will never be changed/configured during game time, so they will remain static.
     public static float SmallPlatformWidth = 4.26f;
@@ -18,12 +18,16 @@ public class GameSettings : MonoBehaviour
     void Awake()
     {
         Instance = this;
-        GameSpeed = GameStarted ? DefaultGameSpeed : 0;
+        GameSpeed = MultiplayerMode ?  0 : DefaultGameSpeed;
     }
 
-    public void StartGame()
+    public void StartMultiplayerGame()
     {
         GameSpeed = DefaultGameSpeed;
-        spawner.SpawnNext();
+
+        if (spawner)
+        {
+            spawner.SpawnNext();
+        }
     }
 }

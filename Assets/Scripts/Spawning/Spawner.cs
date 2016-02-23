@@ -48,7 +48,7 @@ public class Spawner : SpawnerBase
 
 	// Use this for initialization
 	void Start () {
-        if (GameSettings.Instance.GameStarted)
+        if (!GameSettings.Instance.MultiplayerMode)
         {
             SpawnNext();
         }

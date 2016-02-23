@@ -34,9 +34,6 @@ public class Matchmaker : Photon.PunBehaviour {
 
     void InitGame()
     {
-        if (!GameSettings.Instance.GameStarted)
-        {
-            GameSettings.Instance.StartGame();
-        }
+        GameSettings.Instance.StartMultiplayerGame();
     }
 }

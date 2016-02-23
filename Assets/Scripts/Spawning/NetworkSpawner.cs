@@ -5,12 +5,23 @@ public class NetworkSpawner : SpawnerBase
 {
     [SerializeField]
     private float distanceOffset;
+    [SerializeField]
+    private int startingTerrainHeight;
 
-    void Awake () {
+    void Start () {
         PhotonNetwork.OnEventCall += this.OnEvent;
-	}
-	
-	void OnEvent(byte eventCode, object content, int senderId)
+
+        if (GameSettings.Instance.MultiplayerMode)
+        {
+            Vector2 lowerLeftCorner = Camera.main.ViewportToWorldPoint(new Vector3(0, 0));
+            // Camera width = orthographicSize * aspect * 2. Add 4 to account for helper's spawner offset.
+            int width = (int)(Camera.main.orthographicSize * Camera.main.aspect * 2 + distanceOffset + 4);
+            TerrainRenderer terrain = base.SpawnTerrain(lowerLeftCorner.x, lowerLeftCorner.y, width , startingTerrainHeight);
+            terrain.ConfigureCollider(width, startingTerrainHeight);
+        }
+    }
+
+    void OnEvent(byte eventCode, object content, int senderId)
     {
         if(eventCode == (int) NetworkEventCode.SpawnPlatform)
         {
