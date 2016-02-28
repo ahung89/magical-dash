@@ -137,7 +137,7 @@ public class Spawner : SpawnerBase
             // Spawn obstacle in random location on top of terrain segment
             if (Random.Range(0, 2) == 0)
             {
-                float obstacleX = Random.Range(terrainSegmentX - (segmentWidth / 2), terrainSegmentX + (segmentWidth / 2));
+                float obstacleX = Random.Range(terrainSegmentX, terrainSegmentX + segmentWidth);
                 float obstacleY = terrainSegmentY + segmentHeight + 0.5f;
 
                 base.SpawnObstacle(obstacleX, obstacleY);
