@@ -39,11 +39,15 @@ public class Spawner : SpawnerBase
     private int maxObstacleY;
 
     private float cameraLowerEdge;
+    private float cameraUpperY;
 
     void Awake()
     {
         Camera camera = GetComponentInParent<Camera>();
         cameraLowerEdge = camera.transform.position.x - camera.orthographicSize;
+
+        cameraUpperY = camera.transform.position.y + camera.orthographicSize;
+        Debug.Log(cameraUpperY);
     }
 
 	// Use this for initialization
@@ -80,7 +84,9 @@ public class Spawner : SpawnerBase
         if (Random.Range(0, 2) == 0)
         {
             float obstacleX = Random.Range(platformX - (GameSettings.SmallPlatformWidth / 2), platformX + (GameSettings.SmallPlatformWidth / 2));
-            float obstacleY = platformY + 1;
+            float minObstacleY = platformY + 1;
+            float maxYModifier = cameraUpperY - minObstacleY - 0.5f;
+            float obstacleY = minObstacleY + Random.Range(0, maxYModifier);
 
             base.SpawnObstacle(obstacleX, obstacleY);
         }
@@ -138,7 +144,10 @@ public class Spawner : SpawnerBase
             if (Random.Range(0, 2) == 0)
             {
                 float obstacleX = Random.Range(terrainSegmentX, terrainSegmentX + segmentWidth);
-                float obstacleY = terrainSegmentY + segmentHeight + 0.5f;
+
+                float minObstacleY = terrainSegmentY + segmentHeight + 0.5f;
+                float maxYModifier = cameraUpperY - minObstacleY - 0.5f;
+                float obstacleY = minObstacleY + Random.Range(0, maxYModifier);
 
                 base.SpawnObstacle(obstacleX, obstacleY);
             }
