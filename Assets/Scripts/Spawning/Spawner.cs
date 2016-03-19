@@ -51,7 +51,8 @@ public class Spawner : SpawnerBase
     }
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         if (!GameSettings.Instance.MultiplayerMode)
         {
             SpawnNext();
@@ -81,15 +82,11 @@ public class Spawner : SpawnerBase
         base.SpawnPlatform(platformX, platformY);
 
         // Spawn obstacle in random location on top of platform
-        if (Random.Range(0, 2) == 0)
-        {
-            float obstacleX = Random.Range(platformX - (GameSettings.SmallPlatformWidth / 2), platformX + (GameSettings.SmallPlatformWidth / 2));
-            float minObstacleY = platformY + 1;
-            float maxYModifier = cameraUpperY - minObstacleY - 0.5f;
-            float obstacleY = minObstacleY + Random.Range(0, maxYModifier);
+        float minObstacleX = platformX - (GameSettings.SmallPlatformWidth / 2);
+        float maxObstacleX = platformX + (GameSettings.SmallPlatformWidth / 2);
+        float minObstacleY = platformY + 1;
 
-            base.SpawnObstacle(obstacleX, obstacleY);
-        }
+        SpawnObstacle(minObstacleX, maxObstacleX, minObstacleY);
 
         // Schedule next spawn
         Invoke("SpawnNext", GameSettings.SmallPlatformWidth / GameSettings.Instance.GameSpeed + Random.Range(minSpawnWaitTime, maxSpawnWaitTime));
@@ -141,16 +138,11 @@ public class Spawner : SpawnerBase
             heightOfCurrentSequence = segmentHeight;
 
             // Spawn obstacle in random location on top of terrain segment
-            if (Random.Range(0, 2) == 0)
-            {
-                float obstacleX = Random.Range(terrainSegmentX, terrainSegmentX + segmentWidth);
+            float minObstacleX = terrainSegmentX;
+            float maxObstacleX = terrainSegmentX + segmentWidth;
+            float minObstalceY = terrainSegmentY + segmentHeight + 0.5f;
 
-                float minObstacleY = terrainSegmentY + segmentHeight + 0.5f;
-                float maxYModifier = cameraUpperY - minObstacleY - 0.5f;
-                float obstacleY = minObstacleY + Random.Range(0, maxYModifier);
-
-                base.SpawnObstacle(obstacleX, obstacleY);
-            }
+            SpawnObstacle(minObstacleX, maxObstacleX, minObstacleY);
 
             totalWidth += segmentWidth;
         }
@@ -160,8 +152,16 @@ public class Spawner : SpawnerBase
             + Random.Range(minSpawnWaitTime, maxSpawnWaitTime));
     }
 
-    void SpawnObstacle()
+    void SpawnObstacle(float minObstacleX, float maxObstacleX, float minObstacleY)
     {
-        base.SpawnObstacle(transform.position.x, Random.Range(minObstacleY, maxObstacleY));
+        if (Random.Range(0, 2) == 0)
+        {
+            float obstacleX = Random.Range(minObstacleX, maxObstacleX);
+
+            float maxYModifier = cameraUpperY - minObstacleY - 0.5f;
+            float obstacleY = minObstacleY + Random.Range(0, maxYModifier);
+
+            base.SpawnObstacle(obstacleX, obstacleY);
+        }
     }
 }
