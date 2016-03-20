@@ -81,6 +81,11 @@ public class PlayerController : MonoBehaviour
             ResetPlayer();
         }
 
+        if(col.gameObject.tag == "Item")
+        {
+            col.gameObject.SetActive(false);
+        }
+
         if (col.gameObject.tag == "Platform" && !_isGrounded)
         {
             rb2d.velocity = Vector2.zero;

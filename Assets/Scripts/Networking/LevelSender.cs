@@ -36,5 +36,9 @@ public class LevelSender : MonoBehaviour {
         {
             PhotonNetwork.RaiseEvent((int)NetworkEventCode.SpawnObstacle, (Vector2)obj.transform.position, true, null);
         }
+        else if (obj.tag == "Item")
+        {
+            PhotonNetwork.RaiseEvent((int)NetworkEventCode.SpawnItem, (Vector2)obj.transform.position, true, null);
+        }
     }
 }

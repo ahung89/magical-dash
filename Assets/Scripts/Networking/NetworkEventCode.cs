@@ -5,5 +5,6 @@ public enum NetworkEventCode
 {
     SpawnPlatform = 0,
     SpawnTerrain = 1,
-    SpawnObstacle = 2
+    SpawnObstacle = 2,
+    SpawnItem = 3
 }

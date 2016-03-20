@@ -32,12 +32,6 @@ public class Spawner : SpawnerBase
     [SerializeField]
     private int maxContiguousTerrainSegments;
 
-    [SerializeField]
-    private int minObstacleY;
-
-    [SerializeField]
-    private int maxObstacleY;
-
     private float cameraLowerEdge;
     private float cameraUpperY;
 
@@ -86,7 +80,7 @@ public class Spawner : SpawnerBase
         float maxObstacleX = platformX + (GameSettings.SmallPlatformWidth / 2);
         float minObstacleY = platformY + 1;
 
-        SpawnObstacle(minObstacleX, maxObstacleX, minObstacleY);
+        SpawnObject(minObstacleX, maxObstacleX, minObstacleY);
 
         // Schedule next spawn
         Invoke("SpawnNext", GameSettings.SmallPlatformWidth / GameSettings.Instance.GameSpeed + Random.Range(minSpawnWaitTime, maxSpawnWaitTime));
@@ -140,9 +134,9 @@ public class Spawner : SpawnerBase
             // Spawn obstacle in random location on top of terrain segment
             float minObstacleX = terrainSegmentX;
             float maxObstacleX = terrainSegmentX + segmentWidth;
-            float minObstalceY = terrainSegmentY + segmentHeight + 0.5f;
+            float minObstacleY = terrainSegmentY + segmentHeight + 0.5f;
 
-            SpawnObstacle(minObstacleX, maxObstacleX, minObstacleY);
+            SpawnObject(minObstacleX, maxObstacleX, minObstacleY);
 
             totalWidth += segmentWidth;
         }
@@ -152,16 +146,20 @@ public class Spawner : SpawnerBase
             + Random.Range(minSpawnWaitTime, maxSpawnWaitTime));
     }
 
-    void SpawnObstacle(float minObstacleX, float maxObstacleX, float minObstacleY)
+    void SpawnObject(float minObstacleX, float maxObstacleX, float minObstacleY)
     {
+        float obstacleX = Random.Range(minObstacleX, maxObstacleX);
+
+        float maxYModifier = cameraUpperY - minObstacleY - 0.5f;
+        float obstacleY = minObstacleY + Random.Range(0, maxYModifier);
+
         if (Random.Range(0, 2) == 0)
         {
-            float obstacleX = Random.Range(minObstacleX, maxObstacleX);
-
-            float maxYModifier = cameraUpperY - minObstacleY - 0.5f;
-            float obstacleY = minObstacleY + Random.Range(0, maxYModifier);
-
             base.SpawnObstacle(obstacleX, obstacleY);
+        }
+        else
+        {
+            base.SpawnItem(obstacleX, obstacleY);
         }
     }
 }

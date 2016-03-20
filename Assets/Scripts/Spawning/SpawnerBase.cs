@@ -11,6 +11,9 @@ public class SpawnerBase : MonoBehaviour {
     [SerializeField]
     private StackPool obstaclePool;
 
+    [SerializeField]
+    private StackPool itemPool;
+
     public virtual void SpawnPlatform (float posX, float posY)
     {
         GameObject platform = platformPool.Pop();
@@ -29,8 +32,18 @@ public class SpawnerBase : MonoBehaviour {
 
     public virtual void SpawnObstacle(float posX, float posY)
     {
-        GameObject obstacle = obstaclePool.Pop();
-        obstacle.transform.position = new Vector2(posX, posY);
-        obstacle.SetActive(true);
+        SpawnObject(obstaclePool, posX, posY);
+    }
+
+    public virtual void SpawnItem(float posX, float posY)
+    {
+        SpawnObject(itemPool, posX, posY);
+    }
+
+    private void SpawnObject(StackPool pool, float posX, float posY)
+    {
+        GameObject obj = pool.Pop();
+        obj.transform.position = new Vector2(posX, posY);
+        obj.SetActive(true);
     }
 }

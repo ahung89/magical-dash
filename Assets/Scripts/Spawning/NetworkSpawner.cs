@@ -53,4 +53,9 @@ public class NetworkSpawner : SpawnerBase
     {
         base.SpawnObstacle(pos.x + distanceOffset, pos.y);
     }
+
+    void SpawnItem(Vector2 pos)
+    {
+        base.SpawnItem(pos.x + distanceOffset, pos.y);
+    }
 }
