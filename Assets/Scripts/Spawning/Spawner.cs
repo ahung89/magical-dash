@@ -155,7 +155,7 @@ public class Spawner : SpawnerBase
 
         if (Random.Range(0, 2) == 0)
         {
-            base.SpawnObstacle(obstacleX, obstacleY);
+            base.SpawnObstacle(obstacleX, obstacleY, Random.Range(0, 1) == 0 ? ObstacleMovementBehavior.Falling : ObstacleMovementBehavior.Stationary);
         }
         else
         {

@@ -30,9 +30,12 @@ public class SpawnerBase : MonoBehaviour {
         return terrainRenderer;
     }
 
-    public virtual void SpawnObstacle(float posX, float posY)
+    public virtual void SpawnObstacle(float posX, float posY, ObstacleMovementBehavior movementBehavior)
     {
-        SpawnObject(obstaclePool, posX, posY);
+        GameObject obj = obstaclePool.Pop();
+        obj.transform.position = new Vector2(posX, posY);
+        obj.GetComponent<ObstacleController>().MovementBehavior = movementBehavior;
+        obj.SetActive(true);
     }
 
     public virtual void SpawnItem(float posX, float posY)

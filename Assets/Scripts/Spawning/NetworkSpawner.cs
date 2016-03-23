@@ -51,7 +51,7 @@ public class NetworkSpawner : SpawnerBase
 
     void SpawnObstacle(Vector2 pos)
     {
-        base.SpawnObstacle(pos.x + distanceOffset, pos.y);
+        base.SpawnObstacle(pos.x + distanceOffset, pos.y, ObstacleMovementBehavior.Falling);
     }
 
     void SpawnItem(Vector2 pos)
