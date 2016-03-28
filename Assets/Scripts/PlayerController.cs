@@ -81,15 +81,18 @@ public class PlayerController : MonoBehaviour
             ResetPlayer();
         }
 
-        if(col.gameObject.tag == "Item")
-        {
-            col.gameObject.SetActive(false);
-        }
-
         if (col.gameObject.tag == "Platform" && !_isGrounded)
         {
             rb2d.velocity = Vector2.zero;
             _isJumping = false;
+        }
+    }
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.tag == "Item")
+        {
+            collider.gameObject.SetActive(false);
         }
     }
 
